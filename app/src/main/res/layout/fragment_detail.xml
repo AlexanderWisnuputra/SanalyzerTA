@@ -44,15 +44,15 @@
         android:layout_height="52dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="64dp"
-        android:text="ABCD"
+        android:text="ADHI"
         android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="131dp"
-        android:layout_height="55dp"
+        android:layout_width="183dp"
+        android:layout_height="51dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="50,000"
@@ -65,7 +65,7 @@
         android:layout_width="50dp"
         android:layout_height="41dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="24dp"
         android:text="10% "
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/navi3" />
@@ -75,7 +75,7 @@
         android:layout_width="50dp"
         android:layout_height="41dp"
         android:layout_marginTop="21dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="24dp"
         android:text="302000 "
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/percentage" />
@@ -228,7 +228,7 @@
             android:layout_width="260dp"
             android:layout_height="30dp"
             android:paddingStart="16dp"
-            android:text="Volume Average Weekly"
+            android:text="ROA"
             tools:layout_editor_absoluteX="42dp"
             tools:layout_editor_absoluteY="381dp"/>
 
@@ -258,7 +258,7 @@
             android:layout_width="260dp"
             android:layout_height="30dp"
             android:paddingStart="16dp"
-            android:text="Volume Average Monthly"
+            android:text="ROE"
             android:textAlignment="textStart"
             tools:layout_editor_absoluteX="42dp"
             tools:layout_editor_absoluteY="381dp" />
@@ -392,5 +392,15 @@
             tools:layout_editor_absoluteX="42dp"
             tools:layout_editor_absoluteY="381dp" />
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="12dp"
+        android:src="@drawable/up"
+        app:layout_constraintEnd_toStartOf="@+id/price"
+        app:layout_constraintTop_toBottomOf="@+id/navi3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

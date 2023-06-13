@@ -1,4 +1,4 @@
-package com.example.sanalyzer.fragments
+package com.example.sanalyzer.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,11 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.sanalyzer.R
 
-class ItemAdapter( private val itemList: MutableList<Pair<String, Int>>,
-                   private val mainInterface: SOrderInterface
-) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>(), Filterable {
+class SearchStockAdapter(private val searchList: MutableList<Pair<String, Int>>,
+                         private val mainInterface: SOrderInterface
+) : RecyclerView.Adapter<SearchStockAdapter.ItemViewHolder>(), Filterable {
 
-    private var filteredList: MutableList<Pair<String, Int>> = itemList.toMutableList()
+    private var filteredList: MutableList<Pair<String, Int>> = searchList.toMutableList()
     private var isSearching = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -23,7 +23,7 @@ class ItemAdapter( private val itemList: MutableList<Pair<String, Int>>,
     }
 
     override fun getItemCount(): Int {
-        return if (isSearching) filteredList.size else itemList.size
+        return if (isSearching) filteredList.size else searchList.size
     }
 
     inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -49,10 +49,10 @@ class ItemAdapter( private val itemList: MutableList<Pair<String, Int>>,
                 val query = constraint?.toString()?.uppercase()
 
                 filteredList = if (query.isNullOrBlank()) {
-                    itemList.toMutableList()
+                    searchList.toMutableList()
                 } else {
                     isSearching = true
-                    itemList.filter { item ->
+                    searchList.filter { item ->
                         item.first.uppercase().contains(query)
                     }.toMutableList()
                 }
@@ -69,7 +69,7 @@ class ItemAdapter( private val itemList: MutableList<Pair<String, Int>>,
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        val item = if (isSearching) filteredList[position] else itemList[position]
+        val item = if (isSearching) filteredList[position] else searchList[position]
         holder.bind(item)
     }
 }

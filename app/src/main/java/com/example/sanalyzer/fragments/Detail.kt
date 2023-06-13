@@ -5,10 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.sanalyzer.R
+import com.example.sanalyzer.api.YahooFinanceApiClient
+import com.example.sanalyzer.data.StockStatistics
 import com.example.sanalyzer.databinding.FragmentDetailBinding
 import com.example.sanalyzer.databinding.FragmentHomeBinding
+import retrofit2.Call
+import retrofit2.Retrofit
 
 
 class Detail : Fragment() {
@@ -27,9 +32,96 @@ class Detail : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val code = arguments?.getString("code")
         binding.StockName2.text = code
+        val stockcode = "$code.JK"
+        getStatistic(stockcode)
+        getsummary(stockcode)
         binding.button4.setOnClickListener {
             findNavController().navigate(R.id.action_detail_to_chart)
-
         }
+    }
+
+    private fun getStatistic(string: String) {
+        val yahooFinanceApiClient = YahooFinanceApiClient()
+
+        val call = yahooFinanceApiClient.apiService.getStockData(string)
+
+        call.enqueue(object : retrofit2.Callback<StockStatistics> {
+            override fun onResponse(
+                call: Call<StockStatistics>,
+                response: retrofit2.Response<StockStatistics>
+            ) {
+                if (response.isSuccessful) {
+                    val stockStatistics = response.body()
+                    if (stockStatistics != null) {
+                        val result = response.body()
+                        binding.textView00.text = result?.summaryDetail?.fiftyTwoWeekHigh?.fmt.toString()
+                        binding.textView11.text = result?.summaryDetail?.fiftyTwoWeekLow?.fmt.toString()
+                        binding.textView22.text = result?.summaryDetail?.dividendYield?.fmt.toString()
+                        binding.textView33.text = result?.financialData?.returnOnAssets?.fmt.toString()
+                        binding.textView44.text = result?.financialData?.returnOnEquity?.fmt.toString()
+                        binding.textView55.text = result?.defaultKeyStatistics?.bookValue?.fmt.toString()
+                        binding.textView77.text = result?.defaultKeyStatistics?.trailingEps?.fmt.toString()
+                        binding.textView88.text = result?.summaryDetail?.marketCap?.fmt.toString()
+                        fun click(item: String) {
+                            val data = result?.defaultKeyStatistics?.priceToBook.toString()
+                            val mBundle = Bundle()
+                            mBundle.putString("code", data)
+
+                            findNavController().navigate(R.id.action_home_to_detail, mBundle)
+                        }
+                    } else {
+                        println("API request failed with response code: ${response.code()}")
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<StockStatistics>, t: Throwable) {
+                println("API request failed: ${t.message}")
+            }
+        })
+    }
+
+    private fun getsummary(string: String) {
+        val yahooFinanceApiClient = YahooFinanceApiClient()
+
+        val call = yahooFinanceApiClient.apiService.getsummary(string)
+
+        call.enqueue(object : retrofit2.Callback<StockStatistics> {
+            override fun onResponse(
+                call: Call<StockStatistics>,
+                response: retrofit2.Response<StockStatistics>
+            ) {
+                if (response.isSuccessful) {
+                    val stockStatistics = response.body()
+                    if (stockStatistics != null) {
+                        val result = response.body()
+                        binding.textView.text = result?.price?.regularMarketPrice?.fmt
+                        binding.price.text = result?.price?.regularMarketChange?.raw.toString()
+                        binding.textView66.text = result?.financialData?.grossProfits?.fmt.toString()
+
+                        if(result?.price?.regularMarketChange?.raw!! > 0){
+                            binding.imageView.setImageResource(R.drawable.up)
+                        }
+                        else if (result?.price?.regularMarketChange?.raw!! == 0.0){
+                            binding.imageView.visibility = View.INVISIBLE
+
+                        }
+                        else{
+                            binding.imageView.setImageResource(R.drawable.down)
+
+                        }
+                        binding.percentage.text = result?.price?.regularMarketChangePercent?.fmt
+                        binding.volume.text = result?.summaryDetail?.volume?.fmt.toString()
+
+                    } else {
+                        println("API request failed with response code: ${response.code()}")
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<StockStatistics>, t: Throwable) {
+                println("API request failed: ${t.message}")
+            }
+        })
     }
 }

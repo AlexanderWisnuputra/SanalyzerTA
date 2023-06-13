@@ -11,6 +11,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sanalyzer.R
+import com.example.sanalyzer.adapter.SearchStockAdapter
+import com.example.sanalyzer.adapter.SOrderInterface
+import com.example.sanalyzer.api.YahooFinanceApiClient
 import com.example.sanalyzer.databinding.FragmentHomeBinding
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
@@ -24,12 +27,12 @@ import java.util.Locale
 import java.util.TimeZone
 
 
-class Home : Fragment(),SOrderInterface {
+class Home : Fragment(), SOrderInterface {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var recyclerView: RecyclerView
     private lateinit var searchView: SearchView
-    private lateinit var itemAdapter: ItemAdapter
-    private val itemList: MutableList<Pair<String, Int>> = mutableListOf()
+    private lateinit var searchStockAdapter: SearchStockAdapter
+    private val searchList: MutableList<Pair<String, Int>> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,9 +47,9 @@ class Home : Fragment(),SOrderInterface {
         super.onViewCreated(view, savedInstanceState)
 
         recyclerView = binding.LQ45
-        itemAdapter = ItemAdapter(itemList, this)
+        searchStockAdapter = SearchStockAdapter(searchList, this)
         searchView = binding.countrySearch
-        recyclerView.adapter = itemAdapter
+        recyclerView.adapter = searchStockAdapter
         recyclerView.layoutManager = LinearLayoutManager(context)
         filldata()
         search()
@@ -113,23 +116,23 @@ class Home : Fragment(),SOrderInterface {
     private fun search(){
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                itemAdapter.filter.filter(query)
+                searchStockAdapter.filter.filter(query)
                 return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                itemAdapter.filter.filter(newText)
+                searchStockAdapter.filter.filter(newText)
                 return false
             }
         })
     }
 
     private fun add(name: String, intValue: Int) {
-        itemList.add(Pair(name, intValue))
+        searchList.add(Pair(name, intValue))
     }
 
     private fun filldata(){
-    itemList.clear()
+    searchList.clear()
     add("ADHI", R.drawable.aces)
     add("ADRO", R.drawable.adro)
     add("AKRA", R.drawable.akra)

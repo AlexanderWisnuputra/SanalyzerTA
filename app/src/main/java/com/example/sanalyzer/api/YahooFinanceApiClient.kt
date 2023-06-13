@@ -1,11 +1,13 @@
-package com.example.sanalyzer.fragments
+package com.example.sanalyzer.api
 
+import com.example.sanalyzer.data.ChartResponse
+import com.example.sanalyzer.data.StockStatistics
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class YahooFinanceApiClient {
-    private val apiService: ApiService
+    val apiService: ApiService
 
     init {
         val retrofit = Retrofit.Builder()
@@ -43,4 +45,8 @@ class YahooFinanceApiClient {
             }
         })
     }
+
+
+
+
 }

@@ -1,4 +1,4 @@
-package com.example.sanalyzer.fragments
+package com.example.sanalyzer.data
 
 data class ChartResponse(
     val chart: Charts
