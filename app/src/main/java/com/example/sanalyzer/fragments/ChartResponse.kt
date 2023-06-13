@@ -1,10 +1,22 @@
 package com.example.sanalyzer.fragments
 
 data class ChartResponse(
-    val entries: List<ChartEntry>
+    val chart: Charts
 )
 
-data class ChartEntry(
-    val timestamp: Long,
-    val close: Float
+data class Charts(
+    val result: List<Result>
+)
+
+data class Result(
+    val timestamp: List<Long>,
+    val indicators: Indicators
+)
+
+data class Indicators(
+    val quote: List<Quote>
+)
+
+data class Quote(
+    val close: List<Float>
 )

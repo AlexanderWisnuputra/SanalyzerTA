@@ -1,5 +1,6 @@
 package com.example.sanalyzer.fragments
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,8 +12,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sanalyzer.R
 import com.example.sanalyzer.databinding.FragmentHomeBinding
-import okhttp3.internal.notify
-import okhttp3.internal.notifyAll
+import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.ValueFormatter
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 
 class Home : Fragment(),SOrderInterface {
@@ -41,7 +50,64 @@ class Home : Fragment(),SOrderInterface {
         recyclerView.layoutManager = LinearLayoutManager(context)
         filldata()
         search()
+      //getData()
+    }
+    private fun getData(){
+        val yahooFinanceApiClient = YahooFinanceApiClient()
 
+        yahooFinanceApiClient.getChart("^JKSE", "60m", "1d") { timestamp, closePrices ->
+            val lineChart = binding.button2
+            createLineChart(timestamp, closePrices, lineChart)
+        }
+    }
+    private fun createLineChart(timestamp: List<Long>, closePrices: List<Float>, chart: LineChart) {
+        val entries = mutableListOf<Entry>()
+
+        val dateFormatter = SimpleDateFormat("dd/MM", Locale.getDefault())
+        dateFormatter.timeZone = TimeZone.getTimeZone("GMT+7")
+
+        for (i in timestamp.indices) {
+            val closePrice = closePrices[i]
+
+                entries.add(Entry(timestamp[i].toFloat(), closePrice))
+            }
+
+        val xAxis = chart.xAxis
+        val dataSet = LineDataSet(entries,"")
+        val lineData = LineData(dataSet)
+        xAxis.position = XAxis.XAxisPosition.BOTTOM;
+        xAxis.valueFormatter = TimestampAxisValueFormatter()
+        dataSet.setDrawFilled(true)
+        dataSet.fillColor = Color.BLUE
+        chart.setBackgroundColor(Color.WHITE)
+        chart.setDragEnabled(true);
+        chart.setPinchZoom(false)
+        chart.setScaleEnabled(true);
+        chart.axisRight.setDrawLabels(false)
+        chart.description.isEnabled = false
+        chart.legend.isEnabled = false
+        chart.axisRight.isEnabled = false
+        chart.setBorderColor(255)
+        chart.setDrawGridBackground(false)
+        chart.xAxis.setDrawGridLines(false) //enable for grid line
+        chart.axisLeft.setDrawGridLines(false) //enable for grid line
+
+        chart.axisRight.setDrawGridLines(false) //disable vertical line
+        chart.data = lineData
+        chart.invalidate()
+    }
+
+    class TimestampAxisValueFormatter : ValueFormatter() {
+        private val dateFormatter = SimpleDateFormat("HH:mm", Locale.getDefault())
+
+        init {
+            dateFormatter.timeZone = TimeZone.getTimeZone("GMT+7")
+        }
+
+        override fun getFormattedValue(value: Float): String {
+            val dateInMillis = (value * 1000).toLong()
+            return dateFormatter.format(Date(dateInMillis))
+        }
     }
 
     private fun search(){
@@ -109,7 +175,6 @@ class Home : Fragment(),SOrderInterface {
     add("TPIA", R.drawable.tpia)
     add("UNTR", R.drawable.untr)
     add("UNVR", R.drawable.unvr)
-    itemAdapter.notifyDataSetChanged()
 }
 
     override fun click(item: String) {
