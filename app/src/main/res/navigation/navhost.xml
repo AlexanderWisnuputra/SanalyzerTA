@@ -32,11 +32,6 @@
             android:id="@+id/action_detail_to_home"
             app:destination="@id/home"
             app:popUpToInclusive="false" />
-        <argument
-            android:name="scode"
-            app:argType="string"
-            app:nullable="true"
-            android:defaultValue="null" />
         <action
             android:id="@+id/action_detail_to_chart"
             app:destination="@id/chart" />

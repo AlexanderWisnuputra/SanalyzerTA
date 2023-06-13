@@ -1,5 +1,7 @@
 package com.example.sanalyzer.fragments
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -32,6 +34,7 @@ class Home : Fragment(), SOrderInterface {
     private lateinit var recyclerView: RecyclerView
     private lateinit var searchView: SearchView
     private lateinit var searchStockAdapter: SearchStockAdapter
+    private lateinit var sharedPreferences: SharedPreferences
     private val searchList: MutableList<Pair<String, Int>> = mutableListOf()
 
     override fun onCreateView(
@@ -45,7 +48,7 @@ class Home : Fragment(), SOrderInterface {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        sharedPreferences = requireActivity().getSharedPreferences("my_prefs", Context.MODE_PRIVATE)
         recyclerView = binding.LQ45
         searchStockAdapter = SearchStockAdapter(searchList, this)
         searchView = binding.countrySearch
@@ -182,10 +185,9 @@ class Home : Fragment(), SOrderInterface {
 
     override fun click(item: String) {
         val data = item
-        val mBundle = Bundle()
-        mBundle.putString("code", data)
+        sharedPreferences.edit().putString("key", data).apply()
 
-        findNavController().navigate(R.id.action_home_to_detail, mBundle)
+        findNavController().navigate(R.id.action_home_to_detail)
     }
 }
 

@@ -1,5 +1,7 @@
 package com.example.sanalyzer.fragments
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -18,6 +20,7 @@ import retrofit2.Retrofit
 
 class Detail : Fragment() {
     private lateinit var binding: FragmentDetailBinding
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,17 +33,21 @@ class Detail : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val code = arguments?.getString("code")
+        sharedPreferences = requireActivity().getSharedPreferences("my_prefs", Context.MODE_PRIVATE)
+
+        val code = sharedPreferences.getString("code", "ADHI")
+
         binding.StockName2.text = code
         val stockcode = "$code.JK"
-        getStatistic(stockcode)
+        //getStatistic(stockcode)
+
         getsummary(stockcode)
         binding.button4.setOnClickListener {
             findNavController().navigate(R.id.action_detail_to_chart)
         }
     }
 
-    private fun getStatistic(string: String) {
+   /* private fun getStatistic(string: String) {
         val yahooFinanceApiClient = YahooFinanceApiClient()
 
         val call = yahooFinanceApiClient.apiService.getStockData(string)
@@ -79,7 +86,7 @@ class Detail : Fragment() {
                 println("API request failed: ${t.message}")
             }
         })
-    }
+    }*/
 
     private fun getsummary(string: String) {
         val yahooFinanceApiClient = YahooFinanceApiClient()
@@ -92,33 +99,42 @@ class Detail : Fragment() {
                 response: retrofit2.Response<StockStatistics>
             ) {
                 if (response.isSuccessful) {
-                    val stockStatistics = response.body()
-                    if (stockStatistics != null) {
-                        val result = response.body()
-                        binding.textView.text = result?.price?.regularMarketPrice?.fmt
-                        binding.price.text = result?.price?.regularMarketChange?.raw.toString()
-                        binding.textView66.text = result?.financialData?.grossProfits?.fmt.toString()
+                        val stockStatistics = response.body()
+                        if (stockStatistics != null) {
+                            val result = response.body()
+                            binding.textView.text = result?.price?.regularMarketPrice?.fmt
+                            binding.price.text = result?.price?.regularMarketChange?.fmt
+                            binding.textView66.text =
+                                result?.financialData?.grossProfits?.fmt.toString()
+                            binding.percentage.text = result?.price?.regularMarketChangePercent?.fmt
+                            binding.volume.text = result?.summaryDetail?.volume?.fmt.toString()
+                            if (result?.price?.regularMarketChange?.raw!! > 0) {
+                                binding.imageView.setImageResource(R.drawable.up)
+                            } else if (result?.price?.regularMarketChange?.raw!! == 0.0) {
+                                binding.imageView.visibility = View.INVISIBLE
 
-                        if(result?.price?.regularMarketChange?.raw!! > 0){
-                            binding.imageView.setImageResource(R.drawable.up)
+                            } else {
+                                binding.imageView.setImageResource(R.drawable.down)
+
+                            }
+
+                            binding.button4.setOnClickListener() {
+                                val mBundle = Bundle()
+                                val data = binding.StockName2.text.toString()
+                                mBundle.putString("price", result.price.regularMarketPrice.fmt)
+                                mBundle.putString("change", result.price.regularMarketChange.fmt)
+                                mBundle.putString("percentage", result.price.regularMarketChangePercent.fmt)
+                                mBundle.putString("volume", result.summaryDetail.volume.fmt.toString())
+                                mBundle.putString("codes", data)
+                                findNavController().navigate(R.id.action_detail_to_chart, mBundle)
+                            }
+
+                        } else {
+                            println("API request failed with response code: ${response.code()}")
                         }
-                        else if (result?.price?.regularMarketChange?.raw!! == 0.0){
-                            binding.imageView.visibility = View.INVISIBLE
-
-                        }
-                        else{
-                            binding.imageView.setImageResource(R.drawable.down)
-
-                        }
-                        binding.percentage.text = result?.price?.regularMarketChangePercent?.fmt
-                        binding.volume.text = result?.summaryDetail?.volume?.fmt.toString()
-
-                    } else {
-                        println("API request failed with response code: ${response.code()}")
                     }
-                }
-            }
 
+            }
             override fun onFailure(call: Call<StockStatistics>, t: Throwable) {
                 println("API request failed: ${t.message}")
             }
