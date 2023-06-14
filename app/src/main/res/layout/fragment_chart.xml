@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".fragments.Chart">
 
-    <com.github.mikephil.charting.charts.LineChart
+    <com.github.mikephil.charting.charts.CandleStickChart
         android:id="@+id/button2"
         android:layout_width="372dp"
         android:layout_height="197dp"

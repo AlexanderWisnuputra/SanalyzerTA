@@ -56,7 +56,7 @@ class Home : Fragment(), SOrderInterface {
         recyclerView.layoutManager = LinearLayoutManager(context)
         filldata()
         search()
-      //getData()
+      getData()
     }
     private fun getData(){
         val yahooFinanceApiClient = YahooFinanceApiClient()
@@ -69,8 +69,8 @@ class Home : Fragment(), SOrderInterface {
     private fun createLineChart(timestamp: List<Long>, closePrices: List<Float>, chart: LineChart) {
         val entries = mutableListOf<Entry>()
 
-        val dateFormatter = SimpleDateFormat("dd/MM", Locale.getDefault())
-        dateFormatter.timeZone = TimeZone.getTimeZone("GMT+7")
+        val dateFormatterA = SimpleDateFormat("dd/MM", Locale.getDefault())
+        dateFormatterA.timeZone = TimeZone.getTimeZone("GMT+7")
 
         for (i in timestamp.indices) {
             val closePrice = closePrices[i]

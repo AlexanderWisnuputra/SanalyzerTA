@@ -16,9 +16,7 @@
         <action
             android:id="@+id/action_analysis_to_detail"
             app:destination="@id/detail" />
-        <action
-            android:id="@+id/action_analysis_to_chart2"
-            app:destination="@id/chart" />
+
     </fragment>
     <fragment
         android:id="@+id/detail"
@@ -35,9 +33,7 @@
         <action
             android:id="@+id/action_detail_to_chart"
             app:destination="@id/chart" />
-        <action
-            android:id="@+id/action_detail_to_analysis2"
-            app:destination="@id/analysis" />
+
     </fragment>
     <fragment
         android:id="@+id/home"
@@ -64,8 +60,6 @@
         <action
             android:id="@+id/action_chart_to_analysis"
             app:destination="@id/analysis" />
-        <action
-            android:id="@+id/action_chart_to_analysis2"
-            app:destination="@id/analysis" />
+
     </fragment>
 </navigation>

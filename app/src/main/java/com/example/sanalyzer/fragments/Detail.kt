@@ -35,19 +35,20 @@ class Detail : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         sharedPreferences = requireActivity().getSharedPreferences("my_prefs", Context.MODE_PRIVATE)
 
-        val code = sharedPreferences.getString("code", "ADHI")
+        val code = sharedPreferences.getString("key","ADHI")
 
         binding.StockName2.text = code
         val stockcode = "$code.JK"
-        //getStatistic(stockcode)
+        getStatistic(stockcode)
 
         getsummary(stockcode)
-        binding.button4.setOnClickListener {
-            findNavController().navigate(R.id.action_detail_to_chart)
+
+        binding.button5.setOnClickListener {
+            findNavController().navigate(R.id.action_detail_to_analysis)
         }
     }
 
-   /* private fun getStatistic(string: String) {
+    private fun getStatistic(string: String) {
         val yahooFinanceApiClient = YahooFinanceApiClient()
 
         val call = yahooFinanceApiClient.apiService.getStockData(string)
@@ -86,7 +87,7 @@ class Detail : Fragment() {
                 println("API request failed: ${t.message}")
             }
         })
-    }*/
+    }
 
     private fun getsummary(string: String) {
         val yahooFinanceApiClient = YahooFinanceApiClient()
@@ -108,6 +109,7 @@ class Detail : Fragment() {
                                 result?.financialData?.grossProfits?.fmt.toString()
                             binding.percentage.text = result?.price?.regularMarketChangePercent?.fmt
                             binding.volume.text = result?.summaryDetail?.volume?.fmt.toString()
+                            binding.industri.text = result?.summaryProfile?.sector.toString()
                             if (result?.price?.regularMarketChange?.raw!! > 0) {
                                 binding.imageView.setImageResource(R.drawable.up)
                             } else if (result?.price?.regularMarketChange?.raw!! == 0.0) {

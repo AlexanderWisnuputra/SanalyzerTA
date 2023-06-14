@@ -1,5 +1,6 @@
 package com.example.sanalyzer.api
 
+import com.example.sanalyzer.data.CandleStick
 import com.example.sanalyzer.data.ChartResponse
 import com.example.sanalyzer.data.StockStatistics
 import retrofit2.Call
@@ -26,4 +27,13 @@ interface ApiService {
     fun getsummary(
         @Query("symbol") symbol: String
     ): Call<StockStatistics>
+
+
+    @Headers("X-RapidAPI-Key: febf774534msh8e71b6842063fe1p172242jsn613f7b24e2ba")
+    @GET("stock/v2/get-chart")
+    fun getcandle(
+        @Query("symbol") symbol: String,
+        @Query("interval") interval: String,
+        @Query("range") range: String
+    ): Call<CandleStick>
 }
