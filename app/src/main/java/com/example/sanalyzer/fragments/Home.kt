@@ -28,7 +28,6 @@ import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 
-
 class Home : Fragment(), SOrderInterface {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var recyclerView: RecyclerView
@@ -51,32 +50,31 @@ class Home : Fragment(), SOrderInterface {
         sharedPreferences = requireActivity().getSharedPreferences("my_prefs", Context.MODE_PRIVATE)
         recyclerView = binding.LQ45
         searchStockAdapter = SearchStockAdapter(searchList, this)
-        searchView = binding.countrySearch
+        searchView = binding.LQ45Search
         recyclerView.adapter = searchStockAdapter
         recyclerView.layoutManager = LinearLayoutManager(context)
-        filldata()
-        search()
+      filldata()
+      search()
       getData()
     }
     private fun getData(){
         val yahooFinanceApiClient = YahooFinanceApiClient()
-
-        yahooFinanceApiClient.getChart("^JKSE", "60m", "1d") { timestamp, closePrices ->
-            val lineChart = binding.button2
+        yahooFinanceApiClient.getChart("^JKSE", "30m", "1d") { timestamp, closePrices ->
+            val lineChart = binding.IHSG
             createLineChart(timestamp, closePrices, lineChart)
         }
     }
     private fun createLineChart(timestamp: List<Long>, closePrices: List<Float>, chart: LineChart) {
         val entries = mutableListOf<Entry>()
-
         val dateFormatterA = SimpleDateFormat("dd/MM", Locale.getDefault())
         dateFormatterA.timeZone = TimeZone.getTimeZone("GMT+7")
 
         for (i in timestamp.indices) {
+            if (closePrices[i]!= null) {
             val closePrice = closePrices[i]
-
                 entries.add(Entry(timestamp[i].toFloat(), closePrice))
             }
+        }
 
         val xAxis = chart.xAxis
         val dataSet = LineDataSet(entries,"")
@@ -86,19 +84,18 @@ class Home : Fragment(), SOrderInterface {
         dataSet.setDrawFilled(true)
         dataSet.fillColor = Color.BLUE
         chart.setBackgroundColor(Color.WHITE)
-        chart.setDragEnabled(true);
+        chart.setDragEnabled(true)
         chart.setPinchZoom(false)
-        chart.setScaleEnabled(true);
+        chart.setScaleEnabled(true)
         chart.axisRight.setDrawLabels(false)
         chart.description.isEnabled = false
         chart.legend.isEnabled = false
         chart.axisRight.isEnabled = false
         chart.setBorderColor(255)
         chart.setDrawGridBackground(false)
-        chart.xAxis.setDrawGridLines(false) //enable for grid line
-        chart.axisLeft.setDrawGridLines(false) //enable for grid line
-
-        chart.axisRight.setDrawGridLines(false) //disable vertical line
+        chart.xAxis.setDrawGridLines(false)
+        chart.axisLeft.setDrawGridLines(false)
+        chart.axisRight.setDrawGridLines(false)
         chart.data = lineData
         chart.invalidate()
     }
@@ -186,7 +183,6 @@ class Home : Fragment(), SOrderInterface {
     override fun click(item: String) {
         val data = item
         sharedPreferences.edit().putString("key", data).apply()
-
         findNavController().navigate(R.id.action_home_to_detail)
     }
 }

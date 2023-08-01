@@ -22,7 +22,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/button2"
+        android:id="@+id/IHSG"
         android:layout_width="400dp"
         android:layout_height="197dp"
         android:layout_marginTop="8dp"
@@ -32,7 +32,7 @@
         app:layout_constraintTop_toBottomOf="@+id/Navi" />
 
     <androidx.appcompat.widget.SearchView
-        android:id="@+id/country_search"
+        android:id="@+id/LQ45Search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -40,7 +40,7 @@
         android:textCursorDrawable="@null"
         app:iconifiedByDefault="false"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/data"
+        app:layout_constraintTop_toBottomOf="@+id/LQ45Stock"
         app:queryBackground="@null" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -50,10 +50,10 @@
         android:layout_marginTop="155dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button2" />
+        app:layout_constraintTop_toBottomOf="@+id/IHSG" />
 
     <TextView
-        android:id="@+id/data"
+        android:id="@+id/LQ45Stock"
         android:layout_width="347dp"
         android:layout_height="72dp"
         android:layout_marginTop="4dp"
@@ -63,6 +63,6 @@
         android:textSize="34sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button2" />
+        app:layout_constraintTop_toBottomOf="@+id/IHSG" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

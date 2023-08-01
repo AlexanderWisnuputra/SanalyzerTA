@@ -9,7 +9,7 @@ import retrofit2.http.Headers
 import retrofit2.http.Query
 interface ApiService {
     @Headers("X-RapidAPI-Key: febf774534msh8e71b6842063fe1p172242jsn613f7b24e2ba")
-    @GET("stock/v2/get-chart")
+    @GET("stock/v3/get-chart")
     fun getChart(
         @Query("symbol") symbol: String,
         @Query("interval") interval: String,
@@ -30,7 +30,7 @@ interface ApiService {
 
 
     @Headers("X-RapidAPI-Key: febf774534msh8e71b6842063fe1p172242jsn613f7b24e2ba")
-    @GET("stock/v2/get-chart")
+    @GET("stock/v3/get-chart")
     fun getcandle(
         @Query("symbol") symbol: String,
         @Query("interval") interval: String,

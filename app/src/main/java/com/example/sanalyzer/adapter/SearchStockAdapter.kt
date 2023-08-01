@@ -29,13 +29,11 @@ class SearchStockAdapter(private val searchList: MutableList<Pair<String, Int>>,
     inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val textView: TextView = itemView.findViewById(R.id.lqname)
         private val stockListImage = itemView.findViewById<ImageView>(R.id.stockImage)
-
         fun bind(item: Pair<String, Int>) {
             textView.text = item.first
             Glide.with(itemView)
                 .load(item.second)
                 .into(stockListImage)
-
             itemView.setOnClickListener {
                 mainInterface.click(textView.text.toString())
             }
@@ -47,7 +45,6 @@ class SearchStockAdapter(private val searchList: MutableList<Pair<String, Int>>,
             override fun performFiltering(constraint: CharSequence?): FilterResults {
                 val filterResults = FilterResults()
                 val query = constraint?.toString()?.uppercase()
-
                 filteredList = if (query.isNullOrBlank()) {
                     searchList.toMutableList()
                 } else {
@@ -56,11 +53,9 @@ class SearchStockAdapter(private val searchList: MutableList<Pair<String, Int>>,
                         item.first.uppercase().contains(query)
                     }.toMutableList()
                 }
-
                 filterResults.values = filteredList
                 return filterResults
             }
-
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
                 filteredList = results?.values as? MutableList<Pair<String, Int>> ?: mutableListOf()
                 notifyDataSetChanged()

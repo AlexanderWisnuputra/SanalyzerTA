@@ -17,14 +17,12 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 
 import com.example.sanalyzer.databinding.FragmentChartBinding
 import com.github.mikephil.charting.charts.CandleStickChart
-import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.CandleData
 import com.github.mikephil.charting.data.CandleDataSet
 import com.github.mikephil.charting.data.CandleEntry
 import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import java.text.SimpleDateFormat
@@ -48,19 +46,24 @@ class Chart : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedPreferences = requireActivity().getSharedPreferences("my_prefs", Context.MODE_PRIVATE)
-
         val code = arguments?.getString("codes")
-        getcandle("$code.JK")
-
         val price = arguments?.getString("price")
-        val volume = arguments?.getString("volume")
-        val percentage = arguments?.getString("percentage")
         val change = arguments?.getString("change")
+        val pbv = arguments?.getString("pbv")
+        val roe = arguments?.getString("roe")
+        val div = arguments?.getString("div")
+        val low = arguments?.getString("low")
+        val high = arguments?.getString("high")
+        val vol3 = arguments?.getString("volume3")
+        val nf = arguments?.getString("nf")
+        val percentage2 = arguments?.getString("percentage2")
+
         binding.textView3.text = code
         binding.textView5.text = change.toString()
-        binding.textView2.text = volume.toString()
+        binding.textView2.text = nf.toString()
         binding.textView.text = price.toString()
-        binding.textView4.text = percentage.toString()
+        binding.textView4.text = percentage2.toString()
+        val volume2 = arguments?.getString("volume2")
 
         if (binding.textView5.text.toString().toDouble() > 0) {
             binding.imageView.setImageResource(R.drawable.up)
@@ -72,16 +75,28 @@ class Chart : Fragment() {
 
         binding.button5.setOnClickListener {
             val mBundle = Bundle()
-            mBundle.putString("code", binding.textView3.text.toString())
+            mBundle.putString("codes", binding.textView3.text.toString())
+            mBundle.putString("pbv", pbv.toString())
+            mBundle.putString("roe", roe.toString())
+            mBundle.putString("div", div.toString())
+            mBundle.putString("low", low.toString())
+            mBundle.putString("high", high.toString())
+            mBundle.putString("volume2", volume2.toString())
+            mBundle.putString("volume3", vol3.toString())
+            mBundle.putString("price", price.toString())
+            mBundle.putString("nf", nf.toString())
+            mBundle.putString("percentage2", percentage2.toString())
+            mBundle.putString("change", change.toString())
+            mBundle.putString("nf", nf.toString())
             findNavController().navigate(R.id.action_chart_to_analysis, mBundle)
         }
         binding.button7.setOnClickListener {
             findNavController().navigate(R.id.action_chart_to_detail)
-
             val data = binding.textView3.text.toString()
             sharedPreferences.edit().putString("key", data).apply()
-
         }
+        getcandle(binding.textView3.text.toString() +".JK")
+
     }
 
 
@@ -106,16 +121,17 @@ class Chart : Fragment() {
         val entries = mutableListOf<CandleEntry>()
         val dateFormatter = SimpleDateFormat("dd/MM", Locale.getDefault())
         dateFormatter.timeZone = TimeZone.getTimeZone("GMT+7")
-
         for (i in timestamp.indices) {
-            val entry = CandleEntry(
-                i.toFloat(),
-                highPrice[i],
-                lowPrice[i],
-                openPrice[i],
-                closePrice[i]
-            )
-            entries.add(entry)
+            if (highPrice[i] != null && lowPrice[i] != null && openPrice[i] != null && closePrice[i] != null) {
+                val entry = CandleEntry(
+                    i.toFloat(),
+                    highPrice[i]!!,
+                    lowPrice[i]!!,
+                    openPrice[i]!!,
+                    closePrice[i]!!
+                )
+                entries.add(entry)
+            }
         }
 
         val dataSet = CandleDataSet(entries, "Candlestick Data")
@@ -123,7 +139,6 @@ class Chart : Fragment() {
 
         chart.data = candleData
         chart.invalidate()
-
         chart.description.isEnabled = false
         chart.xAxis.position = XAxis.XAxisPosition.BOTTOM
         chart.legend.isEnabled = false
@@ -138,8 +153,6 @@ class Chart : Fragment() {
         dataSet.neutralColor = Color.BLACK
         chart.setDrawGridBackground(true)
         chart.setBackgroundColor(Color.WHITE)
-
-        // Set custom X-axis labels
         chart.xAxis.valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
                 val index = value.toInt()
@@ -151,17 +164,13 @@ class Chart : Fragment() {
                 }
             }
         }
-
-        // Enable highlighting of highest and lowest values
         dataSet.setDrawHighlightIndicators(true)
         dataSet.highLightColor = Color.YELLOW
 
-        // Enable value highlighting on click
         chart.setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
             override fun onValueSelected(e: Entry?, h: Highlight?) {
                 chart.highlightValue(h)
             }
-
             override fun onNothingSelected() {
                 chart.highlightValue(null)
             }

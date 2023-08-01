@@ -55,7 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="50,000"
+        android:text="-"
         android:textSize="35sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/StockName2" />
@@ -66,7 +66,7 @@
         android:layout_height="41dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
-        android:text="10% "
+        android:text="-% "
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/navi3" />
 
@@ -76,7 +76,7 @@
         android:layout_height="41dp"
         android:layout_marginTop="21dp"
         android:layout_marginEnd="24dp"
-        android:text="302000 "
+        android:text="- "
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/percentage" />
 
@@ -86,7 +86,7 @@
         android:layout_height="44dp"
         android:layout_marginStart="124dp"
         android:layout_marginTop="16dp"
-        android:text="5000"
+        android:text="-"
         app:layout_constraintStart_toEndOf="@+id/StockName2"
         app:layout_constraintTop_toBottomOf="@+id/navi3" />
 
@@ -402,26 +402,7 @@
         app:layout_constraintEnd_toStartOf="@+id/price"
         app:layout_constraintTop_toBottomOf="@+id/navi3" />
 
-    <TextView
-        android:id="@+id/industri"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Perbangkan"
-        app:layout_constraintBottom_toTopOf="@+id/textView"
-        app:layout_constraintStart_toEndOf="@+id/industri2"
-        app:layout_constraintTop_toBottomOf="@+id/StockName2"
-        app:layout_constraintVertical_bias="0.0" />
 
-    <TextView
-        android:id="@+id/industri2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="Sector: "
-        app:layout_constraintBottom_toTopOf="@+id/textView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/StockName2"
-        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/industri3"
@@ -431,5 +412,14 @@
         android:text="Volume"
         app:layout_constraintBottom_toTopOf="@+id/volume"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/pbv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="invisible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

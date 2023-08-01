@@ -14,10 +14,4 @@
         android:title="Detail" />
 
 
-    <item
-        android:id="@+id/analysis"
-        android:icon="@drawable/ic_analysis"
-        android:title="Stock Analysis" />
-
-
 </menu>
